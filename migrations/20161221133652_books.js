@@ -1,16 +1,16 @@
 'use strict';
 
-exports.up = function(knex, Promise) {
-  return knex.schema.createTable('books', (table) => {
-    table.increments().primary();
-    table.string('title').notNullable();
-    table.string('genre').notNullable();
-    table.string('description').notNullable();
-    table.string('cover_url').notNullable();
-    table.timestamps(true,true);
+exports.up = function (knex, Promise) {
+  return knex.schema.createTable('books', table => {
+    table.increments();
+    table.text('title').notNullable().defaultTo('');
+    table.text('genre').notNullable().defaultTo('');
+    table.text('description').notNullable().defaultTo('');
+    table.text('cover_url').notNullable().defaultTo('');
+    table.timestamps(true, true);
   });
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function (knex, Promise) {
   return knex.schema.dropTable('books');
 };
