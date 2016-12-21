@@ -8,6 +8,12 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 
+// Allow usage of the .env variables.
+require('dotenv').config();
+
+// Get the public folder for styles and javascript.
+app.use(express.static('public'));
+
 // Set the view engine to PUG.
 app.set('view engine', 'pug')
 
