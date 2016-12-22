@@ -18,12 +18,12 @@ app.use(express.static('public'));
 app.set('view engine', 'pug')
 
 // Create variables for routes handling.
-const index = require('routes/index');
-const books = require('routes/books');
-const authors = require('routes/authors');
+const index = require('./routes/index');
+const books = require('./routes/books');
+const authors = require('./routes/authors');
 
 // Application level middleware to send correct requests to places.
-app.get('/index', index);
+app.get('/', index);
 app.use('/books', books);
 app.use('/authors', authors);
 
