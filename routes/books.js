@@ -6,8 +6,8 @@ var knex = require('../knex');
 
 router.get('/', (req, res, next) => {
   knex('books')
-    .join('books_authors', 'books_authors.book_id', 'books.id')
-    .join('authors', 'authors.id', 'books_authors.author_id')
+    .fullOuterJoin('books_authors', 'books_authors.book_id', 'books.id')
+    .fullOuterJoin('authors', 'authors.id', 'books_authors.author_id')
     .then(data => {
       // Handle the books PUG page with all of the data here.
       let newData = manipulateData(data, 'books');

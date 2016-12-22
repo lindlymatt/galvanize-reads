@@ -1,2 +1,19 @@
 html
-  
+  head
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Oswald:300')
+    link(rel='stylesheet', href='./css/main.css')
+    title Galvanize Reads
+  body
+    main#main-container
+      section#site-logo-div
+        img#site-logo(src="./images/galvanize_reads.svg")
+        h5#site-title-text Galvanize Reads
+      #index-content
+        #i-authors-box
+          a(class="no-link", href="/authors")
+            img#i-authors-img(src='./images/index_authors_image.png')
+            h5(class='index-header-text') Authors
+        #i-books-box
+          a(class="no-link", href="/books")
+            img#i-books-img(src='./images/index_books_image.png')
+            h5(class='index-header-text') Books

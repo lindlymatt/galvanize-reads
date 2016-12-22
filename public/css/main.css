@@ -1,0 +1,113 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+
+/* HTML5 display-role reset for older browsers */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+
+/* Handling the Index Page */
+
+#main-container {
+  font-family: 'Oswald', sans-serif;
+  padding: 20px;
+  min-width: 997px;
+}
+
+#site-logo-div {
+  display: block;
+  float: left;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+#site-logo {
+  display: inline-block;
+  float: left;
+  height: 10%;
+  margin-right: 20px;
+}
+
+#site-title-text {
+  padding: 10px;
+  font-size: 4em;
+  display: inline-block;
+}
+
+#index-content {
+  display: block;
+}
+
+#i-authors-box {
+  border: 1px black solid;
+  width: 50%;
+  text-align: center;
+  float: left;
+}
+
+#i-authors-img {
+  height: 55%;
+  width: 75%;
+  margin: 15px;
+}
+
+#i-books-box {
+  border: 1px black solid;
+  width: 49.60%;
+  text-align: center;
+  float: right;
+}
+
+#i-books-img {
+  height: 55%;
+  width: 75%;
+  margin: 15px;
+}
+
+.no-link {
+  text-decoration: none;
+}
+
+.index-header-text {
+  color: black;
+  margin: 0 15px 15px 15px;
+  letter-spacing: -.5px;
+  text-transform: uppercase;
+  font-size: 2em;
+}

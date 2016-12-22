@@ -101,5 +101,46 @@ router.delete('/:id', (req, res, next) => {
     });
 });
 
+// Handle the Data, getting it back in an acceptable manner.
+function manipulateData(obj, type) {
+  let finalObj = {};
+
+  // Use this part of the function for the Books.
+  if (type === 'books') {
+    for (let i = 0; i < obj.length; i++) {
+      // Create a new object structure.
+      if (finalObj.hasOwnProperty('b' + obj[i].book_id)) {
+        finalObj['b' + obj[i].book_id].authors.push(`${obj[i].first_name} ${obj[i].last_name}`);
+      } else {
+        finalObj['b' + obj[i].book_id] = {
+          title: obj[i].title,
+          genre: obj[i].genre,
+          description: obj[i].description,
+          cover_url: obj[i].cover_url,
+          authors: [obj[i].first_name + ' ' + obj[i].last_name]
+        }
+      }
+    }
+  }
+  // Use this part if you're handling Authors.
+  else {
+    for (let i = 0; i < obj.length; i++) {
+      // Create a new object structure.
+      if (finalObj.hasOwnProperty('a' + obj[i].author_id)) {
+        finalObj['a' + obj[i].author_id].books.push(`${obj[i].title}`);
+      } else {
+        finalObj['a' + obj[i].author_id] = {
+          first_name: obj[i].first_name,
+          last_name: obj[i].last_name,
+          bio: obj[i].bio,
+          portal_url: obj[i].portal_url,
+          books: [obj[i].title]
+        }
+      }
+    }
+  }
+
+  return finalObj;
+}
 
 module.exports = router;
