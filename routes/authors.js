@@ -6,8 +6,12 @@ var knex = require('../knex');
 
 router.get('/', (req, res, next) => {
   knex('authors')
+    .join('books_authors', 'books_authors.author_id', 'authors.id')
+    .join('books', 'books.id', 'books_authors.book_id')
     .then(data => {
       // Handle the authors PUG page with all of the data here.
+      let newData = manipulateData(data, 'authors');
+      res.send(newData);
       // return res.render('authors', { title: 'Galvanize Authors' });
       return;
     })
@@ -19,12 +23,14 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   knex('authors')
     .where('authors.id', id)
-    .first()
+    .join('books_authors', 'books_authors.author_id', 'authors.id')
+    .join('books', 'books.id', 'books_authors.book_id')
     .then(data => {
-      if (data) {
+      if (data.length !== 0) {
         // Handle the author received in the PUG file here.
+        let newData = manipulateData(data, 'authors');
+        res.send(newData);
         // return res.render('author', { title: 'Galvanize Reads' });
-        return;
       }
       // Handle not having the book in the database.
       // return res.render('404', { title: 'Galvanize Reads' });
@@ -40,13 +46,14 @@ router.get('/new', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  const { title, genre, description, cover_url } = req.body;
-  const newBook = { title, genre, description, cover_url };
+  const { first_name, last_name, bio, portal_url } = req.body;
+  const newAuthor = { first_name, last_name, bio, portal_url };
 
   knex('authors')
-    .insert(newBook, ['title', 'genre', 'description', 'cover_url'])
+    .insert(newAuthor, ['first_name', 'last_name', 'bio', 'portal_url'])
     .then(count => {
       // After completing, send to the newly created book page.
+      return;
       // return res.render('author', { title: 'Galvanize Reads' });
     })
     .catch(err => {
@@ -58,10 +65,10 @@ router.patch('/:id', (req, res, next) => {
   const id = req.params.id;
   const { title, genre, description, cover_url } = req.body;
 
-  const changedBook = { title, genre, description, cover_url };
+  const changedAuthor = { title, genre, description, cover_url };
   knex('authors')
     .where('authors.id', id)
-    .update(changedBook, ['title', 'genre', 'description', 'cover_url'])
+    .update(changedAuthor, ['first_name', 'last_name', 'bio', 'portal_url'])
     .then(data => {
       if (data) {
         // Go back to the book page, with the newly updated information.

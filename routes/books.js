@@ -9,10 +9,8 @@ router.get('/', (req, res, next) => {
     .join('books_authors', 'books_authors.book_id', 'books.id')
     .join('authors', 'authors.id', 'books_authors.author_id')
     .then(data => {
-      delete data.created_at;
-      delete data.updated_at;
       // Handle the books PUG page with all of the data here.
-      const newData = getFinalBooksObj(data);
+      let newData = manipulateData(data, 'books');
       res.send(newData);
       // res.render('books', { booksObj: getFinalBooksObj(data) });
     })
@@ -22,18 +20,22 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
+  const id = req.params.id;
+
   knex('books')
+    .join('books_authors', 'books_authors.book_id', 'books.id')
+    .join('authors', 'authors.id', 'books_authors.author_id')
     .where('books.id', id)
-    .first()
     .then(data => {
-      if (data) {
+      if (data.length !== 0) {
         // Handle the book received in the PUG file here.
+        let newData = manipulateData(data, 'books');
         // res.render('book', { title: 'Galvanize Reads' });
-        return;
+        res.send(newData);
       }
       // Handle not having the book in the database.
       // res.render('404', { title: 'Galvanize Reads' });
-      return;
+      res.status(404).send('Not Found');
     })
     .catch(err => {
       next(err);
@@ -50,9 +52,10 @@ router.post('/', (req, res, next) => {
 
   knex('books')
     .insert(newBook, ['title', 'genre', 'description', 'cover_url'])
-    .then(count => {
+    .then(result => {
       // After completing, send to the newly created book page.
       // res.render('book', { title: 'Galvanize Reads' });
+      res.send(result);
     })
     .catch(err => {
       next(err);
@@ -70,6 +73,7 @@ router.patch('/:id', (req, res, next) => {
     .then(data => {
       // Go back to the book page, with the newly updated information.
       // res.render('book', { title: 'Galvanize Reads' });
+      res.send(data);
     })
     .catch(err => {
       next(err);
@@ -83,28 +87,50 @@ router.delete('/:id', (req, res, next) => {
     .where('books.id', id)
     .del()
     .then(result => {
-      return;
       // Go back to the all books page, maybe with a modal present.
       // res.render('book', { title: 'Galvanize Reads' });
+      return;
     })
     .catch(err => {
       next(err);
     });
 });
 
-function getFinalBooksObj(objArr) {
+// Handle the Data, getting it back in an acceptable manner.
+function manipulateData(obj, type) {
   let finalObj = {};
-  for (let i = 0; i < objArr.length; i++) {
-    // Create a new object structure.
-    if (finalObj.hasOwnProperty(objArr[i].book_id)) {
-      finalObj[objArr[i].book_id].authors.push(`${objArr[i].first_name} ${objArr[i].last_name}`);
-    } else {
-      finalObj[objArr[i].book_id] = {
-        title: objArr[i].title,
-        genre: objArr[i].genre,
-        description: objArr[i].description,
-        cover_url: objArr[i].cover_url,
-        authors: [objArr[i].first_name + ' ' + objArr[i].last_name]
+
+  // Use this part of the function for the Books.
+  if (type === 'books') {
+    for (let i = 0; i < obj.length; i++) {
+      // Create a new object structure.
+      if (finalObj.hasOwnProperty('b' + obj[i].book_id)) {
+        finalObj['b' + obj[i].book_id].authors.push(`${obj[i].first_name} ${obj[i].last_name}`);
+      } else {
+        finalObj['b' + obj[i].book_id] = {
+          title: obj[i].title,
+          genre: obj[i].genre,
+          description: obj[i].description,
+          cover_url: obj[i].cover_url,
+          authors: [obj[i].first_name + ' ' + obj[i].last_name]
+        }
+      }
+    }
+  }
+  // Use this part if you're handling Authors.
+  else {
+    for (let i = 0; i < obj.length; i++) {
+      // Create a new object structure.
+      if (finalObj.hasOwnProperty('a' + obj[i].author_id)) {
+        finalObj['a' + obj[i].author_id].books.push(`${obj[i].title}`);
+      } else {
+        finalObj['a' + obj[i].author_id] = {
+          first_name: obj[i].first_name,
+          last_name: obj[i].last_name,
+          bio: obj[i].bio,
+          portal_url: obj[i].portal_url,
+          books: [obj[i].title]
+        }
       }
     }
   }
